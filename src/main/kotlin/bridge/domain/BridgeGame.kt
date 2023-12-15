@@ -3,20 +3,50 @@ package bridge.domain
 /**
  * 다리 건너기 게임을 관리하는 클래스
  */
-class BridgeGame {
-    /**
-     * 사용자가 칸을 이동할 때 사용하는 메서드
-     *
-     *
-     * 이동을 위해 필요한 메서드의 반환 타입(return type), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
-     */
-    fun move() {}
+class BridgeGame(private val bridge: List<String>) {
 
-    /**
-     * 사용자가 게임을 다시 시도할 때 사용하는 메서드
-     *
-     *
-     * 재시작을 위해 필요한 메서드의 반환 타입(return type), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
-     */
-    fun retry() {}
+    private var map = Pair("[", "[")
+    private var attempts = 1
+    private var userPos = 0
+
+    fun getBridge(): List<String> {
+        return bridge
+    }
+
+    fun getUserPos(): Int {
+        return userPos
+    }
+
+    fun getMap(): Pair<String, String> {
+        return map
+    }
+
+    fun getAttempts(): Int {
+        return attempts
+    }
+
+    fun increaseUserPos() {
+        userPos += 1
+    }
+
+    fun move(userMove: String) {
+        val moveChar = if (bridge[userPos] == userMove) " O " else " X "
+        val (upper, lower) = getBridgeSegment(moveChar, userMove)
+        map = Pair(map.first + upper, map.second + lower)
+    }
+
+    private fun getBridgeSegment(moveChar: String, userMove: String): Pair<String, String> {
+        val separator = if (userPos > 0) "|" else ""
+        return when (userMove) {
+            "U" -> Pair(separator + moveChar, separator + "   ")
+            else -> Pair(separator + "   ", separator + moveChar)
+        }
+    }
+
+    fun retry() {
+        attempts += 1
+        userPos = 0
+        map = Pair("[", "[")
+
+    }
 }
