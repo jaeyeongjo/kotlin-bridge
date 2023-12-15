@@ -35,6 +35,36 @@ class ApplicationTest : NsTest() {
     }
 
     @Test
+    fun `기능 테스트 - 성공`() {
+        assertRandomNumberInRangeTest({
+            run("5", "D", "R","U","D","D","R","U","D","U","U","D")
+            assertThat(output()).contains(
+                "[ O |   |   ]",
+                "[   | O | X ]",
+                "[ O |   | O | O |   ]",
+                "[   | O |   |   | O ]",
+                "게임 성공 여부: 성공",
+                "총 시도한 횟수: 3"
+            )
+        }, 1, 0, 1,1,0)  //UDUUD
+    }
+
+    @Test
+    fun `기능 테스트 - 실패`() {
+        assertRandomNumberInRangeTest({
+            run("5", "D", "U","D","U","D","R","D","U","U","Q")
+            assertThat(output()).contains(
+                "[ O |   | O |   | X ]",
+                "[   | O |   | O |   ]",
+                "[ O |   |   ]",
+                "[   | O | X ]",
+                "게임 성공 여부: 실패",
+                "총 시도한 횟수: 2"
+            )
+        }, 0, 1, 0,1,1)  //DUDUU
+    }
+
+    @Test
     fun `예외 테스트`() {
         assertSimpleTest {
             runException("a")
